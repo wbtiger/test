@@ -1,1 +1,33 @@
-#pipeline 
+
+kind: pipeline
+type: docker
+name: buildtest
+platform:
+  os: linux
+  arch: amd64
+steps:
+- name: golang
+  image: golang
+  commands:
+  - go get
+  - go test
+# 需要将软件包与部署脚本提前上传到远程主机(见文件上传模板)
+# host、username、password可在参数管理中配置
+- name: 远程主机部署
+  image: appleboy/drone-ssh
+  settings:
+    host: 
+      from_secret: ip
+    username: 
+      from_secret: name
+    password: 
+      from_secret: pwd
+    port: 22
+    script:
+      - chmod +x /home/deploy.sh
+      - ./home/deploy.sh
+trigger:
+  branch:
+  - master
+  event:
+  - push
