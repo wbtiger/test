@@ -4,6 +4,8 @@
 
 #### reposyncer test from gitlink
 
+#### reposyncer from github
+
 ```bash
 touch README.md
 git init
